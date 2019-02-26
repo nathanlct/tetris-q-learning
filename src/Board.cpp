@@ -1,10 +1,10 @@
-// Grid.cpp
+// Board.cpp
 
-#include "Grid.hpp"
+#include "Board.hpp"
 
 
-Grid::Grid (sf::Vector2i grid_size) :
-    size { grid_size },
+Board::Board (sf::Vector2i board_size) :
+    size { board_size },
     current_piece { nullptr },
     next_pieces { next_pieces_size },
     next_pieces_idx { 0 },
@@ -16,7 +16,7 @@ Grid::Grid (sf::Vector2i grid_size) :
     generate_next_pieces();
 }
 
-bool Grid::spawn_new_piece () {
+bool Board::spawn_new_piece () {
     PieceType type = next_piece();
     current_piece = std::unique_ptr<Piece>(new Piece(type, spawn_pos));
 
@@ -29,7 +29,7 @@ bool Grid::spawn_new_piece () {
     }
 }
 
-bool Grid::hay_collision (Piece piece) {
+bool Board::hay_collision (Piece piece) {
     auto pattern = piece.get_pattern();
 
     for (auto i = 0; i < Piece::box_size; ++i) {
@@ -46,7 +46,7 @@ bool Grid::hay_collision (Piece piece) {
     return false;
 }
 
-bool Grid::move_piece_down () {
+bool Board::move_piece_down () {
 
     if (current_piece) {
         Piece tmp_piece = *current_piece;
@@ -64,7 +64,7 @@ bool Grid::move_piece_down () {
     return false;    
 }
 
-bool Grid::execute_action (Action action) {
+bool Board::execute_action (Action action) {
 
     if (current_piece) {
 
@@ -100,7 +100,7 @@ bool Grid::execute_action (Action action) {
     return false;
 }
 
-void Grid::add_piece_to_stack () {
+void Board::add_piece_to_stack () {
     if (current_piece) {
         auto pattern = current_piece->get_pattern();
 
@@ -115,7 +115,7 @@ void Grid::add_piece_to_stack () {
     }
 }
 
-void Grid::generate_next_pieces () {    
+void Board::generate_next_pieces () {    
 
     std::sample (piece_types.begin(), piece_types.end(), 
                 next_pieces.begin(), next_pieces_size, 
@@ -123,7 +123,7 @@ void Grid::generate_next_pieces () {
 
 }
 
-PieceType Grid::next_piece () {
+PieceType Board::next_piece () {
     PieceType type = next_pieces[next_pieces_idx];
 
     if (++next_pieces_idx == next_pieces_size) {
@@ -134,72 +134,18 @@ PieceType Grid::next_piece () {
     return type;
 }
 
-void Grid::reset () {
+void Board::reset () {
     // TODO
 }
 
-void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    // TODO no need to compute shapes at each iteration
+sf::Vector2i Board::get_size () const {
+    return size;
+}
 
-    // draw background
-    sf::RectangleShape background ({ cell_size.x * size.x, cell_size.y * size.y });
-    background.setFillColor(sf::Color::White);
-    background.setOutlineColor(sf::Color::Black);
-    background.setOutlineThickness(3.0);
+const std::unique_ptr<Piece>& Board::get_current_piece () const {
+    return current_piece;
+}
 
-    target.draw(background, states);
-
-
-
-    // draw background tetriminos (stack)
-    for (auto i = 0; i < size.y; ++i) {
-        for (auto j = 0; j < size.x; ++j) {
-            if (auto type = stack[i + Piece::box_size][j]) {
-                sf::RectangleShape cell (cell_size);
-                cell.setPosition(cell_size.x * j, cell_size.y * i);
-                cell.setFillColor(piece_color.at(*type));
-                target.draw(cell, states);
-            }
-        }
-    }
-
-    // draw current tetrimino
-    if (current_piece) {
-        auto pattern = current_piece->get_pattern();
-        for (auto i = 0; i < Piece::box_size; ++i) {
-            for (auto j = 0; j < Piece::box_size; ++j) {
-                if (pattern[j][i]) {
-                    sf::RectangleShape cell (cell_size);
-                    sf::Vector2i pos = current_piece->get_pos() + sf::Vector2i(i, j);
-                    if (pos.y >= 0) {
-                        cell.setPosition(cell_size.x * pos.x, cell_size.y * pos.y);
-                        cell.setFillColor(piece_color.at(current_piece->get_type()));
-                        target.draw(cell, states);
-                    }
-                }
-            }
-        }
-    }
-
-
-    // draw grid 
-    sf::VertexArray vertex_grid (sf::Lines);
-
-    for (auto x = 0; x <= size.x; ++x) {
-        sf::Vertex top (cell_size.x * sf::Vector2f(x, 0), grid_color);
-        sf::Vertex bottom (cell_size.x * sf::Vector2f(x, size.y), grid_color);
-        vertex_grid.append(top);
-        vertex_grid.append(bottom);
-    }
-
-    for (auto y = 0; y <= size.y; ++y) {
-        sf::Vertex left (cell_size.y * sf::Vector2f(0, y), grid_color);
-        sf::Vertex right (cell_size.y * sf::Vector2f(size.x, y), grid_color);
-        vertex_grid.append(left);
-        vertex_grid.append(right);
-    }
-
-    target.draw(vertex_grid, states);
-
+const std::vector<std::vector<std::optional<PieceType>>>& Board::get_stack () const {
+    return stack;
 }

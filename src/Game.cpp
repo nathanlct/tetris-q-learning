@@ -2,9 +2,9 @@
 
 #include "Game.hpp"
 
-Game::Game (sf::Vector2i grid_size) :
-    grid (grid_size),
-    state { State::stopped },
+Game::Game (sf::Vector2i board_size) :
+    board (board_size),
+    state { GameState::stopped },
     falling_timer { 0 },
     falling_speed { normal_falling_speed }
 {
@@ -12,37 +12,44 @@ Game::Game (sf::Vector2i grid_size) :
 }
 
 void Game::init () {
-    // grid.reset(); 
+    // board.reset(); 
 }
 
 void Game::stop () {
-    state = State::stopped;
+    state = GameState::stopped;
 }
 
 void Game::run () {
-    state = State::running;
+    state = GameState::running;
 }
 
 void Game::pause () {
-    if (state == State::running) {
-        state = State::paused;
+    if (state == GameState::running) {
+        state = GameState::paused;
     }
 }
 
 void Game::resume () {
-    if (state == State::paused) {
-        state = State::running;
+    if (state == GameState::paused) {
+        state = GameState::running;
     }
 }
 
+GameState Game::get_current_state () const {
+    return state;
+}
+
+
 void Game::update (double dt) {
-    if (state == State::running) {
+    fps = 1000. / dt;
+
+    if (state == GameState::running) {
         falling_timer += dt;
         if (falling_timer >= falling_speed) {
             falling_timer = 0;
             
-            if (!grid.move_piece_down()) {
-                if (!grid.spawn_new_piece()) {
+            if (!board.move_piece_down()) {
+                if (!board.spawn_new_piece()) {
                     stop();
                 }
             }
@@ -53,22 +60,22 @@ void Game::update (double dt) {
 void Game::key_pressed (sf::Keyboard::Key key) {
     switch (key) {
         case sf::Keyboard::A:
-            if (state == State::running) grid.execute_action(Action::rotate_left);
+            if (state == GameState::running) board.execute_action(Action::rotate_left);
             break;
         case sf::Keyboard::E:
-            if (state == State::running) grid.execute_action(Action::rotate_right);
+            if (state == GameState::running) board.execute_action(Action::rotate_right);
             break;
         case sf::Keyboard::Q:
-            if (state == State::running) grid.execute_action(Action::move_left);
+            if (state == GameState::running) board.execute_action(Action::move_left);
             break;
         case sf::Keyboard::D:
-            if (state == State::running) grid.execute_action(Action::move_right);
+            if (state == GameState::running) board.execute_action(Action::move_right);
             break;
         case sf::Keyboard::Z:
-            if (state == State::running) grid.execute_action(Action::hard_drop);
+            if (state == GameState::running) board.execute_action(Action::hard_drop);
             break;
         case sf::Keyboard::S:
-            if (state == State::running) falling_speed = fast_falling_speed;
+            if (state == GameState::running) falling_speed = fast_falling_speed;
             break;
         case sf::Keyboard::Space:
             pause();
@@ -92,6 +99,10 @@ void Game::key_released (sf::Keyboard::Key key) {
 }
 
 
-Grid& Game::get_grid () {
-    return grid;
+const Board& Game::get_board () const {
+    return board;
+}
+
+float Game::get_fps () const {
+    return fps;
 }

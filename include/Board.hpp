@@ -1,7 +1,7 @@
-// Grid.hpp
+// Board.hpp
 
-#ifndef GRID_H
-#define GRID_H
+#ifndef BOARD_H
+#define BOARD_H
 
 #include <random>
 #include <vector>
@@ -27,10 +27,10 @@ enum class Action {
 
 
 
-class Grid : public sf::Drawable
+class Board 
 {
 public:
-	Grid (sf::Vector2i grid_size);
+	Board (sf::Vector2i board_size);
 
 	bool spawn_new_piece ();
 	bool move_piece_down ();
@@ -39,9 +39,11 @@ public:
 
 	void reset ();
 
-private:
+	sf::Vector2i get_size () const;
+	const std::unique_ptr<Piece>& get_current_piece () const;
+	const std::vector<std::vector<std::optional<PieceType>>>& get_stack () const;
 
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+private:
 
 	void generate_next_pieces ();
 	PieceType next_piece ();
@@ -63,19 +65,6 @@ private:
 	std::vector<std::vector<std::optional<PieceType>>> stack;
 
 
-	const sf::Color grid_color { 0, 0, 0, 150 };
-	sf::Vector2f cell_size = {50, 50};
-
-
-	const std::unordered_map<PieceType, sf::Color> piece_color {
-		{ PieceType::I, sf::Color::Cyan },
-		{ PieceType::J, sf::Color::Blue },
-		{ PieceType::L, sf::Color(255, 165, 0) }, // orange
-		{ PieceType::O, sf::Color::Yellow },
-		{ PieceType::S, sf::Color::Green },
-		{ PieceType::T, sf::Color::Magenta },
-		{ PieceType::Z, sf::Color::Red }
-	};
 
 };
 
