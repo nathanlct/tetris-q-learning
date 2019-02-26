@@ -4,7 +4,7 @@
 
 - [x] Controls
 - [ ] Scoring system
-- [ ] UI
+- [ ] UI
 - [ ] \(Optional) More complex wall kicks when rotating (could be exploited by agent)
 - [ ] Q-Learning
 
