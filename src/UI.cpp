@@ -3,8 +3,7 @@
 #include "UI.hpp"
 
 const sf::Vector2i UI::win_size { 1000, 1200 };
-const sf::Color UI::bg_color { 130, 200, 250 };
-
+const sf::Color UI::bg_color { 40, 40, 40 };
 
 UI::UI (const Game& game) :
     game (game),
@@ -17,9 +16,9 @@ UI::UI (const Game& game) :
     board_transform.translate(400, 100);
     info_transform.translate(50, 100);
 
-    board_background.setFillColor(sf::Color::White);
-    board_background.setOutlineColor(sf::Color::Black);
-    board_background.setOutlineThickness(3.0);
+    board_background.setFillColor(sf::Color::Black);
+    board_background.setOutlineColor(sf::Color::White);
+    board_background.setOutlineThickness(5.0);
 
     for (auto x = 0; x <= board_size.x; ++x) {
         sf::Vertex top (cell_size.x * sf::Vector2f(x, 0), board_color);
@@ -43,8 +42,8 @@ void UI::draw (sf::RenderTarget& target, sf::RenderStates states) const {
     font.loadFromFile("res/vcr_osd_mono.ttf");
 
     sf::Text tetris ("Tetris", font, 50);
-    tetris.setPosition({ 60, 0 });
-    tetris.setFillColor(sf::Color::Blue);
+    tetris.setPosition({ 55, 0 });
+    tetris.setFillColor(sf::Color::Green);
     target.draw(tetris, info_transform);
 
     GameState state = game.get_current_state();
@@ -101,9 +100,11 @@ void UI::draw_board(sf::RenderTarget& target, sf::RenderStates states) const
         for (auto j = 0; j < board_size.x; ++j) {
             auto stack = game.get_board().get_stack();
             if (auto type = stack[i + Piece::box_size][j]) {
-                sf::RectangleShape cell (cell_size);
-                cell.setPosition(cell_size.x * j, cell_size.y * i);
+                sf::RectangleShape cell ({cell_size.x - 8, cell_size.y - 8});
+                cell.setPosition(cell_size.x * j + 4, cell_size.y * i + 4);
                 cell.setFillColor(piece_color.at(*type));
+                cell.setOutlineColor(sf::Color::White);
+                cell.setOutlineThickness(3.0);
                 target.draw(cell, board_transform);
             }
         }
@@ -116,11 +117,13 @@ void UI::draw_board(sf::RenderTarget& target, sf::RenderStates states) const
         for (auto i = 0; i < Piece::box_size; ++i) {
             for (auto j = 0; j < Piece::box_size; ++j) {
                 if (pattern[j][i]) {
-                    sf::RectangleShape cell (cell_size);
+                sf::RectangleShape cell ({cell_size.x - 8, cell_size.y - 8});
                     sf::Vector2i pos = current_piece->get_pos() + sf::Vector2i(i, j);
                     if (pos.y >= 0) {
-                        cell.setPosition(cell_size.x * pos.x, cell_size.y * pos.y);
+                        cell.setPosition(cell_size.x * pos.x + 4, cell_size.y * pos.y + 4);
                         cell.setFillColor(piece_color.at(current_piece->get_type()));
+                        cell.setOutlineColor(sf::Color::White);
+                        cell.setOutlineThickness(3.0);
                         target.draw(cell, board_transform);
                     }
                 }

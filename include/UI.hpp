@@ -34,7 +34,7 @@ private:
 	virtual void draw (sf::RenderTarget& target, sf::RenderStates states) const;
 	void draw_board (sf::RenderTarget& target, sf::RenderStates states) const;
 
-	inline static const sf::Color board_color { 0, 0, 0, 150 };
+	inline static const sf::Color board_color { 50, 50, 50 };
 	inline static const sf::Vector2f cell_size { 50, 50 };
 
 	const std::unordered_map<PieceType, sf::Color> piece_color {
