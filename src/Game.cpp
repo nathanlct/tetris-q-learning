@@ -3,10 +3,11 @@
 #include "Game.hpp"
 
 Game::Game (sf::Vector2i board_size) :
-    board (board_size),
+    board (board_size, score),
     state { GameState::stopped },
     falling_timer { 0 },
-    falling_speed { normal_falling_speed }
+    falling_speed { normal_falling_speed },
+    score { 0 }
 {
 	init();
 }
@@ -51,6 +52,11 @@ void Game::update (double dt) {
             if (!board.move_piece_down()) {
                 if (!board.spawn_new_piece()) {
                     stop();
+                }
+            }
+            else {
+                if (falling_speed == fast_falling_speed) {
+                    score += 1;
                 }
             }
         }
@@ -105,4 +111,8 @@ const Board& Game::get_board () const {
 
 float Game::get_fps () const {
     return fps;
+}
+
+size_t Game::get_score () const {
+    return score;
 }

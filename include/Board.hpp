@@ -31,7 +31,7 @@ enum class Action {
 class Board 
 {
 public:
-	Board (sf::Vector2i board_size);
+	Board (sf::Vector2i board_size, size_t& game_score);
 
 	bool spawn_new_piece ();
 	bool move_piece_down ();
@@ -55,6 +55,8 @@ private:
 
 	sf::Vector2i size;
 	sf::Vector2i spawn_pos;
+
+	size_t& game_score;
 
 	std::unique_ptr<Piece> current_piece;
 

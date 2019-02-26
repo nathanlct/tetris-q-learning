@@ -3,10 +3,16 @@
 ## Todo
 
 - [x] Controls
-- [ ] Scoring system
+- [x] Scoring system
 - [x] UI
-- [ ] \(Optional) More complex wall kicks when rotating (could be exploited by agent)
 - [ ] Q-Learning
+
+Optional:
+
+- [ ] More complex wall kicks when rotating (could be exploited by agent)
+- [ ] Make tetrominos fall completely when clearing lines (currently dropping is naive)
+- [ ] Add T-spins, difficulty and combos to scoring
+- [ ] Make a sexier UI
 
 ## Dependencies
 
@@ -43,6 +49,8 @@ Hold | Space
 
 Action | Points
 ------ | ------
+Soft Drop | 1 point per cell
+Hard Drop | 2 point per cell
 Single | 100 × level
 Double | 300 × level
 Triple | 500 × level

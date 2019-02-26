@@ -32,12 +32,14 @@ public:
 	const Board& get_board () const;
 
 	float get_fps () const;
+	size_t get_score () const;
 
 
 private:
 	Board board;
 	
 	GameState state;
+	size_t score;
 
 	float falling_timer;
 	float falling_speed;

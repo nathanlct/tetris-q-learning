@@ -59,7 +59,8 @@ void UI::draw (sf::RenderTarget& target, sf::RenderStates states) const {
     game_state.setPosition({ 0, 100 });
     target.draw(game_state, info_transform);
 
-    sf::Text score ("Score: 0", font, 30);
+    size_t score_val = game.get_score();
+    sf::Text score ("Score: " + std::to_string(score_val), font, 30);
     score.setPosition({ 0, 150 });
     target.draw(score, info_transform);
 
