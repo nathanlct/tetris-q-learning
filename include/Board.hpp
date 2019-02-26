@@ -7,6 +7,7 @@
 #include <vector>
 #include <optional>
 #include <algorithm>
+#include <iostream>
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -49,6 +50,7 @@ private:
 	PieceType next_piece ();
 
 	void add_piece_to_stack ();
+	void try_clearing_lines (int start, int end);
 	bool hay_collision (Piece piece);
 
 	sf::Vector2i size;

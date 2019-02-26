@@ -111,7 +111,25 @@ void Board::add_piece_to_stack () {
                     stack[pos.y + Piece::box_size][pos.x] = current_piece->get_type();
                 }
             }
-        }    
+        }  
+
+        try_clearing_lines (current_piece->get_pos().y + Piece::box_size, 
+                            std::min(current_piece->get_pos().y + 2 * Piece::box_size, size.y));  
+    }
+}
+
+void Board::try_clearing_lines (int start, int end) {
+    for (auto it = stack.begin(); it != stack.end(); ++it) {
+        bool filled = true;
+        for (auto x = 0; x < size.x; ++x) {
+            filled &= (*it)[x].has_value();
+        }
+
+        if (filled) {
+            stack.erase (it);
+            std::vector<std::optional<PieceType>> empty_line (size.x, std::nullopt);
+            stack.insert(stack.begin(), empty_line);
+        }
     }
 }
 
