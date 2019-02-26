@@ -26,8 +26,22 @@ int main () {
 
     sf::Event event;
     while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
-        window.close();
+      switch (event.type) {
+        case sf::Event::Closed:
+          window.close();
+          break;
+
+        case sf::Event::KeyPressed:
+          game.key_pressed(event.key.code);
+          break;
+
+        case sf::Event::KeyReleased:
+          game.key_released(event.key.code);
+          break;
+
+        default:
+          break;
+      }
     }
 
     if (clock.getElapsedTime().asSeconds() >= time_between_frames) {

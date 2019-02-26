@@ -27,6 +27,14 @@ void Piece::move_down () {
     pos.y++;
 }
 
+void Piece::move_left () {
+    pos.x--;
+}
+
+void Piece::move_right () {
+    pos.x++;
+}
+
 void Piece::rotate_right () {
     rotation = (rotation + 1) % 4;
 }

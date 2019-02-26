@@ -29,6 +29,8 @@ public:
 	PieceType get_type () const;
 
 	void move_down();
+	void move_left();
+	void move_right();
 	void rotate_right();
 	void rotate_left();
 

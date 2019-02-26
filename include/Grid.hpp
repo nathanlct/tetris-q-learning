@@ -7,8 +7,6 @@
 #include <vector>
 #include <optional>
 #include <algorithm>
-#include <iostream>
-using namespace std; // TMP
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -23,6 +21,10 @@ top-left corner is (0, 0), right/bottom are increasing x/y values respectively
 */
 
 
+enum class Action {
+	rotate_left, rotate_right, move_left, move_right, hard_drop
+};
+
 
 
 class Grid : public sf::Drawable
@@ -32,6 +34,8 @@ public:
 
 	bool spawn_new_piece ();
 	bool move_piece_down ();
+
+	bool execute_action (Action action);
 
 	void reset ();
 
@@ -43,7 +47,7 @@ private:
 	PieceType next_piece ();
 
 	void add_piece_to_stack ();
-	bool can_move_down ();
+	bool hay_collision (Piece piece);
 
 	sf::Vector2i size;
 	sf::Vector2i spawn_pos;

@@ -20,7 +20,7 @@ bool Grid::spawn_new_piece () {
     PieceType type = next_piece();
     current_piece = std::unique_ptr<Piece>(new Piece(type, spawn_pos));
 
-    if (can_move_down()) {
+    if (!hay_collision(*current_piece)) {
         return true;
     }
     else {
@@ -29,27 +29,19 @@ bool Grid::spawn_new_piece () {
     }
 }
 
-bool Grid::can_move_down () {
-    if (current_piece) {
-        auto pattern = current_piece->get_pattern();
+bool Grid::hay_collision (Piece piece) {
+    auto pattern = piece.get_pattern();
 
-        for (auto i = 0; i < Piece::box_size; ++i) {
-            for (auto j = 0; j < Piece::box_size; ++j) {
-                if (pattern[j][i]) {
-                    sf::Vector2i pos = current_piece->get_pos() + sf::Vector2i(i, j);
-                    pos.y += 1;
-
-                    if (pos.y >= size.y || stack[pos.y + Piece::box_size][pos.x]) {
-                        cout << "false" << endl;
-                        return false;
-                    }
+    for (auto i = 0; i < Piece::box_size; ++i) {
+        for (auto j = 0; j < Piece::box_size; ++j) {
+            if (pattern[j][i]) {
+                sf::Vector2i pos = piece.get_pos() + sf::Vector2i(i, j);
+                if (pos.y >= size.y || pos.x >= size.x || pos.x < 0 || stack[pos.y + Piece::box_size][pos.x]) {
+                    return true;
                 }
             }
-        }    
-
-                        cout << "true" << endl;
-        return true;
-    }
+        }
+    }   
 
     return false;
 }
@@ -57,7 +49,10 @@ bool Grid::can_move_down () {
 bool Grid::move_piece_down () {
 
     if (current_piece) {
-        if (can_move_down()) {
+        Piece tmp_piece = *current_piece;
+        tmp_piece.move_down();
+
+        if (!hay_collision(tmp_piece)) {
             current_piece->move_down();
             return true;
         }
@@ -67,6 +62,42 @@ bool Grid::move_piece_down () {
     }
 
     return false;    
+}
+
+bool Grid::execute_action (Action action) {
+
+    if (current_piece) {
+
+        if (action == Action::hard_drop) {
+            while (current_piece) {
+                move_piece_down();
+            }
+            return true;
+        }
+
+        Piece tmp_piece = *current_piece;
+        
+        switch (action) {
+            case Action::rotate_left: tmp_piece.rotate_left(); break;
+            case Action::rotate_right: tmp_piece.rotate_right(); break;
+            case Action::move_left: tmp_piece.move_left(); break;
+            case Action::move_right: tmp_piece.move_right(); break;
+            default: return false;
+        }
+
+        if (!hay_collision(tmp_piece)) {
+            switch (action) {
+                case Action::rotate_left: current_piece->rotate_left(); break;
+                case Action::rotate_right: current_piece->rotate_right(); break;
+                case Action::move_left: current_piece->move_left(); break;
+                case Action::move_right: current_piece->move_right(); break;
+                default: return false;
+            }   
+            return true;       
+        }
+    }
+
+    return false;
 }
 
 void Grid::add_piece_to_stack () {
