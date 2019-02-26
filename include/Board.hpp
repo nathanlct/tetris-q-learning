@@ -58,7 +58,7 @@ private:
 
 	std::vector<PieceType> piece_types;
 
-	static constexpr size_t next_pieces_size { 1 };
+	static constexpr size_t next_pieces_size { 10 };
 	std::vector<PieceType> next_pieces;
 	size_t next_pieces_idx;
 

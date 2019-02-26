@@ -42,8 +42,8 @@ private:
 	float falling_timer;
 	float falling_speed;
 
-	static constexpr float normal_falling_speed = 300;
-	static constexpr float fast_falling_speed = 100;
+	static constexpr float normal_falling_speed = 140;
+	static constexpr float fast_falling_speed = 50;
 
 	float fps;
 };
