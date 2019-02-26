@@ -7,13 +7,15 @@ Game::Game (sf::Vector2i board_size) :
     state { GameState::stopped },
     falling_timer { 0 },
     falling_speed { normal_falling_speed },
-    score { 0 }
+    score { 0 },
+    terminate { false }
 {
 	init();
 }
 
 void Game::init () {
-    // board.reset(); 
+    board.reset();
+    score = 0;
 }
 
 void Game::stop () {
@@ -41,7 +43,11 @@ GameState Game::get_current_state () const {
 }
 
 
-void Game::update (double dt) {
+bool Game::update (double dt) {
+    if (terminate) {
+        return false;
+    }
+
     fps = 1000. / dt;
 
     if (state == GameState::running) {
@@ -61,6 +67,8 @@ void Game::update (double dt) {
             }
         }
     }
+
+    return true;
 }
 
 void Game::key_pressed (sf::Keyboard::Key key) {
@@ -85,6 +93,17 @@ void Game::key_pressed (sf::Keyboard::Key key) {
             break;
         case sf::Keyboard::Space:
             pause();
+            break;
+        case sf::Keyboard::Return:
+            if (state == GameState::stopped) {
+                init();
+                run();
+            }
+            break;
+        case sf::Keyboard::W:
+            if (state != GameState::running) {
+                terminate = true;
+            }
             break;
         default:
             break;

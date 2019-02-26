@@ -44,29 +44,50 @@ void UI::draw (sf::RenderTarget& target, sf::RenderStates states) const {
 
     sf::Text tetris ("Tetris", font, 50);
     tetris.setPosition({ 60, 0 });
-    tetris.setFillColor({ 255, 0, 0 });
+    tetris.setFillColor(sf::Color::Blue);
     target.draw(tetris, info_transform);
 
     GameState state = game.get_current_state();
     std::string state_txt;
     switch (state) {
         case GameState::paused: state_txt = "Paused"; break;
-        case GameState::running: state_txt = "Running"; break;
-        case GameState::stopped: state_txt = "Stopped"; break;        
+        case GameState::running: state_txt = "Playing"; break;
+        case GameState::stopped: state_txt = "Game Over"; break;        
     }
 
     sf::Text game_state (state_txt, font, 30);
     game_state.setPosition({ 0, 100 });
+    if (state == GameState::stopped) {
+        game_state.setFillColor(sf::Color::Red);
+        game_state.setStyle(sf::Text::Bold);
+
+        sf::Text replay ("Press Enter to restart", font, 20);
+        replay.setPosition({ 0, 150 });
+        replay.setFillColor(sf::Color::Red);
+        target.draw(replay, info_transform);
+    }
     target.draw(game_state, info_transform);
+    if (state != GameState::running) {
+        sf::Text quit ("Press W to quit", font, 20);
+        quit.setPosition({ 0, 180 });
+        quit.setFillColor(sf::Color::Red);
+        target.draw(quit, info_transform);
+    }
+
 
     size_t score_val = game.get_score();
-    sf::Text score ("Score: " + std::to_string(score_val), font, 30);
-    score.setPosition({ 0, 150 });
+    sf::Text score ("Score: ", font, 30);
+    sf::Text score_content (std::to_string(score_val), font, 40);
+    score_content.setPosition({ 0, 320 });
+    score_content.setFillColor(sf::Color::Magenta);
+    score.setPosition({ 0, 250 });
+    score.setFillColor(sf::Color::Magenta);
+    target.draw(score_content, info_transform);
     target.draw(score, info_transform);
 
     int fps_val = (int)game.get_fps();
     sf::Text fps (std::to_string(fps_val) + " FPS", font, 30);
-    fps.setPosition({ 0, 250 });
+    fps.setPosition({ 0, 500 });
     target.draw(fps, info_transform);
 }
 

@@ -48,9 +48,11 @@ int main () {
       window.clear(UI::bg_color);
       sf::Time elapsed = clock.restart();;
 
-      game.update(elapsed.asMilliseconds());
-      window.draw(ui);
+      if (!game.update(elapsed.asMilliseconds())) {
+        window.close();
+      }
 
+      window.draw(ui);
       window.display();
     }
   }

@@ -168,7 +168,13 @@ PieceType Board::next_piece () {
 }
 
 void Board::reset () {
-    // TODO
+    current_piece = nullptr;
+    next_pieces_idx = 0;
+    generate_next_pieces();
+    
+    for (auto& row: stack) {
+        std::fill(row.begin(), row.end(), std::nullopt);
+    }
 }
 
 sf::Vector2i Board::get_size () const {

@@ -22,7 +22,7 @@ public:
 	void run ();
 	void pause ();
 	void resume ();
-	void update (double dt);
+	bool update (double dt);
 
 	GameState get_current_state () const;
 
@@ -43,6 +43,8 @@ private:
 
 	float falling_timer;
 	float falling_speed;
+
+	bool terminate;
 
 	static constexpr float normal_falling_speed = 140;
 	static constexpr float fast_falling_speed = 50;
