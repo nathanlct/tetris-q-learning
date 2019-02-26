@@ -30,8 +30,8 @@ Action | Key
 ------ | ---
 Left | Q
 Right | D
-Rotate Left | A
-Rotate Right | E
+Rotate Left | K
+Rotate Right | M
 Soft Drop | S
 Hard Drop | Z
 Hold | Space

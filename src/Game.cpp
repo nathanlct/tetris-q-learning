@@ -59,10 +59,10 @@ void Game::update (double dt) {
 
 void Game::key_pressed (sf::Keyboard::Key key) {
     switch (key) {
-        case sf::Keyboard::A:
+        case sf::Keyboard::K:
             if (state == GameState::running) board.execute_action(Action::rotate_left);
             break;
-        case sf::Keyboard::E:
+        case sf::Keyboard::M:
             if (state == GameState::running) board.execute_action(Action::rotate_right);
             break;
         case sf::Keyboard::Q:
