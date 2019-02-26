@@ -12,7 +12,8 @@ Board::Board (sf::Vector2i board_size, size_t& game_score) :
                   PieceType::S, PieceType::T, PieceType::Z },
     spawn_pos { (size.x - Piece::box_size) / 2, - Piece::box_size },
     stack (size.y + Piece::box_size, std::vector<std::optional<PieceType>> (size.x, std::nullopt)),
-    game_score { game_score }
+    game_score { game_score },
+    rd_generator { std::random_device{}() }
 {
     generate_next_pieces();
 }
@@ -149,11 +150,11 @@ void Board::try_clearing_lines (int start, int end) {
 }
 
 void Board::generate_next_pieces () {    
+    for (auto i = 0; i < next_pieces_size; ++i) {
+        next_pieces[i] = piece_types[i % 7];
+    }
 
-    std::sample (piece_types.begin(), piece_types.end(), 
-                next_pieces.begin(), next_pieces_size, 
-                std::mt19937{std::random_device{}()});
-
+    std::shuffle (next_pieces.begin(), next_pieces.end(), rd_generator);
 }
 
 PieceType Board::next_piece () {

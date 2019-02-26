@@ -61,9 +61,11 @@ private:
 
 	std::vector<PieceType> piece_types;
 
-	static constexpr size_t next_pieces_size { 10 };
+
+	static constexpr size_t next_pieces_size { 700 };
 	std::vector<PieceType> next_pieces;
 	size_t next_pieces_idx;
+	std::mt19937 rd_generator;
 
 	std::vector<std::vector<std::optional<PieceType>>> stack;
 
