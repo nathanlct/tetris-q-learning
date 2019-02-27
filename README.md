@@ -1,18 +1,5 @@
 # Learn to play Tetris using approximate Q-Learning
 
-## Todo
-
-- [x] Controls
-- [x] Scoring system
-- [x] UI
-- [ ] Q-Learning
-
-Optional:
-
-- [ ] More complex wall kicks when rotating (could be exploited by agent)
-- [ ] Make tetrominos fall completely when clearing lines (currently dropping is naive)
-- [ ] Add T-spins, difficulty and combos to scoring
-- [ ] Make a sexier UI
 
 ## Dependencies
 
@@ -34,8 +21,8 @@ Then compile using `make` or run using `make run`.
 
 Action | Key
 ------ | ---
-Left | Q
-Right | D
+Move Left | Q
+Move Right | D
 Rotate Left | K
 Rotate Right | M
 Soft Drop | S
@@ -47,20 +34,11 @@ Hold | Space
 
 ## Scoring
 
-Action | Points
+Action | Reward
 ------ | ------
 Soft Drop | 1 point per cell
 Hard Drop | 2 point per cell
-Single | 100 × level
-Double | 300 × level
-Triple | 500 × level
-Tetris | 800 × level; difficult
-T-Spin Mini no lines | 100 × level
-T-Spin no lines | 400 × level
-T-Spin Mini Single | 200 × level; difficult
-T-Spin  |  	800 × level; difficult
-T-Spin Mini Double (if present) | 400 × level; difficult
-T-Spin Double | 1200 × level; difficult
-T-Spin Triple | 1600 × level; difficult
-Back-to-Back difficult line clears | points x 1.5
-Combo | 50 × combo count × level
+Single (1 line) | 100 points
+Double (2 lines) | 300 points
+Triple (3 lines) | 500 points
+Tetris (4 lines) | 800 points
